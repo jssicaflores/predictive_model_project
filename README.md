@@ -1,45 +1,59 @@
-Donation Forecasting Model Using Annual Giving Data
+# Donation Forecasting with Annual Giving Data
+
+This project uses a real fundraising dataset to predict future annual donations. The data includes several years of donor giving history. I reshape that information into a clean time series and use an ARIMA model to forecast future giving.
+
+The goal is to show how a nonprofit or fundraising team can use historical trends to support planning and budgeting.
+
+---
+
+## Data
+
+The dataset comes from the **Data Science for Fundraising** sample files on Kaggle.
+
+Each donor record includes several columns with yearly giving history:
+
+- `CurrFYGiving`
+- `PrevFYGiving`
+- `PrevFY1Giving`
+- `PrevFY2Giving`
+- `PrevFY3Giving`
+- `PrevFY4Giving`
+
+Each of these represents giving in a different fiscal year. I map those columns to actual calendar years and aggregate across all donors to create a single annual time series from 2009 to 2014.
+
+> Note  
+> The original CSV is **not** stored in this repository.  
+> To run the notebook, download `data_science_for_fundraising_donor_data.csv` from the Kaggle project and place it in the `data/` folder.
+
+---
+
+## Project Workflow
+
+1. **Load and inspect the data**  
+   Read the donor file and explore the key columns.
+
+2. **Clean the giving fields**  
+   The giving amounts are strings with symbols (for example `$200`).  
+   I remove dollar signs and commas and convert them to numeric values so they can be summed.
+
+3. **Reshape into a time series**  
+   Each donor has multiple columns for different fiscal years.  
+   I map each column to a specific calendar year, then sum giving across all donors to get total giving per year.
+
+4. **Build a forecasting model**  
+   Because the data is annual and there are only a few points, I use a simple ARIMA model from `statsmodels`.  
+   ARIMA works well here because:
+   - there is a clear overall trend  
+   - there is no strong seasonal pattern at the yearly level  
+   - the dataset is small
+
+5. **Generate the forecast**  
+   The model predicts the next five years of total giving and returns a confidence interval around those estimates.
+
+6. **Visualize the results**  
+   The final chart shows:
+   - Historical giving from 2009 to 2014  
+   - Forecasted giving from 2015 to 2019  
+   - A shaded confidence band to show model uncertainty  
 
 
-This project explores a real fundraising dataset and uses it to predict future giving. The data includes several years of donor giving history. I reshaped that information into a clean time series and built a forecasting model to estimate donations for the next few years.
-The goal is to show how organizations can use historical trends to understand how contributions may shift over time.
-
-
-About the Data
-The dataset comes from the “Data Science for Fundraising” sample files. Each donor record contains yearly giving history across multiple fiscal years. Because the data is donor-level and each year’s gifts are stored in separate columns, the first step was converting everything into a single annual giving timeline.
-The final time series includes annual totals from 2009 to 2014.
-
-
-Project Steps
-1. Clean the giving fields
-The giving amounts were formatted as strings with symbols, so I removed dollar signs and commas and converted everything to numeric values.
-2. Reshape into a usable time series
-Each donor had separate columns for gifts from different fiscal years. I mapped those columns to actual years, then summed across all donors to build a single year-by-year donation total.
-3. Build a forecasting model
-Because the dataset is yearly and fairly small, a simple ARIMA model was a good fit. ARIMA handles broad trends without needing seasonal patterns.
-4. Generate the forecast
-The model predicted the next five years of giving. I added a confidence interval so it’s clear how much uncertainty to expect this far out.
-5. Visualize the results
-
-   
-The final chart shows:<br>
-Historical giving from 2009 to 2014<br>
-Predictions from 2015 to 2019<br>
-A shaded confidence band around the forecast<br>
-This makes it easy to compare past trends with expected future values.<br>
-
-
-What This Project Demonstrates
-
-
-This notebook shows how a nonprofit or fundraising team could take the data they already have and turn it into a practical forecast. Even with limited history, basic time series models can help guide planning and budgeting.<br>
-
-
-For me, it was also a hands-on way to practice:<br>
-Data cleaning<br>
-Time series preparation<br>
-Model building<br>
-Forecast visualization<br>
-Storytelling with real nonprofit-style data<br>
-Notebook<br>
-The full workflow is in the Colab notebook, including the code to clean, reshape, model, and visualize the forecast.
